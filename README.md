@@ -47,7 +47,7 @@ sudo systemctl restart docker
 
 #### 3）**使用sudo docker images查看镜像是否下载成功**
 
-![](../images/case01.png)
+![](doc/images/case01.png)
 
 #### 4）创建实例并启动
 
@@ -68,7 +68,7 @@ docker run -p 3306:3306 --name mysql \
 
 #### 5）查看进程docker ps
 
-![](../images/case02.png)
+![](doc/images/case02.png)
 
 #### 6）查看连接是否成功
 
@@ -185,11 +185,7 @@ redisdesktopmanager工具
 
 ### 1、idea创建工程各个模块（Spring Initializr向导）
 
-1）最终创建效果：
-
-![](../images/case04.png)
-
-2）单个创建向导：
+单个创建向导：
 
 商品服务、仓储服务、订单服务、优惠券服务、用户服务
 
@@ -199,7 +195,7 @@ redisdesktopmanager工具
 
 ​		每个服务，包名类似，除了根据服务不同区分
 
-![](../images/case03.png)
+![](doc/images/case03.png)
 
 ### 2、创建mysql数据库
 
@@ -211,7 +207,7 @@ redisdesktopmanager工具
 
 > 这里先使用fast、fast-vue快速搭建
 
-![](../images/case05.png)
+![](doc/images/case05.png)
 
 #### 2）使用renren-fast（后台）
 
