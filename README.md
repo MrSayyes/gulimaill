@@ -413,9 +413,18 @@ class GulimallProductApplicationTests {
 
 ```
 
-8）其他工程也是同product一样
+#### 8）其他工程也是同product一样
+
+> 在ware中有个数据表字段Longblob要改成byte[]
 
 - 逆向工程生成代码
 - 编写配置文件
-- 编写测试类
+- 启动主程序后访问网址http://localhost:8080/coupon/coupon/list
+
+```java
+返回结果（无记录）：
+{"msg":"success","code":0,"page":{"totalCount":0,"pageSize":10,"totalPage":0,"currPage":1,"list":[]}}
+```
+
+
 
