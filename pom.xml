@@ -19,5 +19,6 @@
         <module>renren-fast</module>
         <!--逆向工程-->
         <module>renren-generator</module>
+        <module>gulimall-common</module>
     </modules>
 </project>

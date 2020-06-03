@@ -1,4 +1,4 @@
-# SpringBoot案例高级
+# 谷粒商城项目案例
 
 ## 一、环境准备
 
@@ -199,7 +199,7 @@ redisdesktopmanager工具
 
 ### 2、创建mysql数据库
 
-见sql文件夹下。
+数据库和表：见doc/sql文件夹下。
 
 ### 3、后台管理系统
 
@@ -213,13 +213,15 @@ redisdesktopmanager工具
 
 - 项目clone下来加入自己本地项目中
 
-- 创建后台管理库mailcase_admin，并执行开源项目自带db的mysql脚本
+- 创建后台管理库gulimall_admin，并执行开源项目自带db的mysql脚本
 
 - 修改application配置文件（数据库连接内容）
 
 - 直接运行RenrenApplication.java测试数据库连接情况，然后浏览器访问http://localhost:8080/renren-fast/
 
-  浏览器展示：{"msg":"invalid token","code":401}
+  ```
+  界面显示：{"msg":"invalid token","code":401}
+  ```
 
 #### 3）使用renren-fast-vue（前端）
 
@@ -241,10 +243,179 @@ redisdesktopmanager工具
 >
 > 2、运行项目：npm run dev
 
-#### 4）使用renren-generator（逆向工程）
+- 浏览器打开http://localhost:8001/
 
-- 修改application文件，修改数据库连接。
-- 
+![](doc/images/case06.png)
 
+#### 4）使用renren-generator（数据库逆向生成对象文件），这里先处理product的模块
 
+- 修改application文件，修改数据库连接（逐个库去设置处理）。
+- 修改generator.properties文件，调整路径和包名
+
+```properties
+mainPath=com.sayyes
+#包名
+package=com.sayyes.gulimall
+moduleName=product
+#作者
+author=sayyes
+#Email
+email=sayyes@gmail.com
+#表前缀（类名不会包含表前缀）
+tablePrefix=pms_
+```
+
+- 启动该模块，然后浏览器打开：http://localhost/
+
+![](doc/images/case07.png)
+
+- 将逆向工程包添加到指定模块，这块是gulimall-product
+
+> 这里工程会报错，暂时不处理，创建gulimall-common管理公共模块后，然后在解决gulimall-product的报错
+
+![](doc/images/case08.png)
+
+#### 5）创建gulimall-common模块（maven方式）
+
+> 统一管理其他模块公共类，公共依赖（很重要）
+
+![](doc/images/case09.png)
+
+- 每个微服务模块pom.xml添加依赖
+
+```xml
+<!--依赖公共模块-->
+<dependency>
+    <groupId>com.sayyes.gulimall</groupId>
+    <artifactId>gulimall-common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+- gulimall-common进行依赖管理、公共类处理
+
+  > 1、处理pom.xml引入微服务模块所属依赖
+  >
+  > 2、部分公共类，可以从renren-fast中获取：如PageUtils.java
+
+```xml
+<!-- 案例如下 -->
+<!--mybatis plus-->
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-boot-starter</artifactId>
+    <version>3.2.0</version>
+</dependency>
+<!--lombok-->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.12</version>
+</dependency>
+<!--httpcore-->
+<dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpcore</artifactId>
+    <version>4.4.13</version>
+</dependency>
+<!--commons-lang-->
+<dependency>
+    <groupId>commons-lang</groupId>
+    <artifactId>commons-lang</artifactId>
+    <version>2.6</version>
+</dependency>
+<!--mysql-->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.17</version>
+</dependency>
+<!--servlet-->
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>servlet-api</artifactId>
+    <version>2.5</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+- 解决gulimall-product的报错
+
+#### 7）gulimall-product开发
+
+- application.yml配置数据源
+
+```yaml
+# 数据源配置
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://192.168.70.129:3306/gulimall_pms
+    driver-class-name: com.mysql.jdbc.Driver
+```
+
+- 注解扫描mapper类
+
+```java
+@MapperScan("com.sayyes.gulimall.product.dao")
+@SpringBootApplication
+public class GulimallProductApplication {
+   // 代码段
+}
+```
+
+- application.yml配置mapper的sql映射文件、主键自增
+
+```yaml
+# mapper路径配置
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  # 设置主键自增
+  global-config:
+    db-config:
+      id-type: auto
+```
+
+- 编写测试类
+
+```java
+package com.sayyes.gulimall.product;
+@SpringBootTest
+class GulimallProductApplicationTests {
+
+    @Autowired
+    BrandService brandService;
+    @Test
+    void contextLoads() {
+        BrandEntity brandEntity = new BrandEntity();
+        //插入
+//        brandEntity.setDescript("华为");
+//        brandService.save(brandEntity);
+//        System.out.println("保存成功");
+
+        //更新
+//        brandEntity.setBrandId(1L);
+//        brandEntity.setDescript("中兴");
+//        brandService.updateById(brandEntity);
+
+        //删除
+//        brandService.removeById(2L);
+
+        //查询
+        List<BrandEntity> list = brandService.list(new QueryWrapper<BrandEntity>().eq("brand_id", 1L));
+        list.forEach((item)->{
+            System.out.println(item);
+        });
+    }
+
+}
+
+```
+
+8）其他工程也是同product一样
+
+- 逆向工程生成代码
+- 编写配置文件
+- 编写测试类
 
