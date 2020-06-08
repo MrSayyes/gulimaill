@@ -19,6 +19,7 @@
         <module>renren-fast</module>
         <!--逆向工程-->
         <module>renren-generator</module>
+        <!--服务公共模块-->
         <module>gulimall-common</module>
     </modules>
 </project>

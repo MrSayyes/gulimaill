@@ -247,7 +247,9 @@ redisdesktopmanager工具
 
 ![](doc/images/case06.png)
 
-#### 4）使用renren-generator（数据库逆向生成对象文件），这里先处理product的模块
+### 4、微服务模块处理
+
+#### 1）使用renren-generator（数据库逆向生成对象文件），这里先处理product的模块
 
 - 修改application文件，修改数据库连接（逐个库去设置处理）。
 - 修改generator.properties文件，调整路径和包名
@@ -275,7 +277,7 @@ tablePrefix=pms_
 
 ![](doc/images/case08.png)
 
-#### 5）创建gulimall-common模块（maven方式）
+#### 2）创建gulimall-common模块（maven方式）
 
 > 统一管理其他模块公共类，公共依赖（很重要）
 
@@ -341,7 +343,7 @@ tablePrefix=pms_
 
 - 解决gulimall-product的报错
 
-#### 7）gulimall-product开发
+#### 3）gulimall-product开发
 
 - application.yml配置数据源
 
@@ -413,7 +415,7 @@ class GulimallProductApplicationTests {
 
 ```
 
-#### 8）其他工程也是同product一样
+#### 4）其他工程也是同product一样
 
 > 在ware中有个数据表字段Longblob要改成byte[]
 
@@ -425,6 +427,10 @@ class GulimallProductApplicationTests {
 返回结果（无记录）：
 {"msg":"success","code":0,"page":{"totalCount":0,"pageSize":10,"totalPage":0,"currPage":1,"list":[]}}
 ```
+
+### 5、微服务-注册中心
+
+> Eureka：这里不使用，原因在于存在开源项目不维护的风险。
 
 
 
